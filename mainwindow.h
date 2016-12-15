@@ -33,9 +33,11 @@ private:
 
     void setupActions();
 
-    QSlider *slider;
+    QSlider *durationSlider;
+    QLabel *durationLabel;
+    QSlider *volumeSlider;
+    QLabel *volumeLabel;
     QMediaPlayer *player;
-    QLabel *duration;
     QAction *actOpen;
     QAction *actionPause;
     QAction *actionBackw;

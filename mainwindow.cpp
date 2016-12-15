@@ -21,15 +21,18 @@
 
 #include <QDebug>
 
+#include <QGroupBox>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-      slider(new QSlider(Qt::Horizontal)),
-      player(new QMediaPlayer),
-      duration(new QLabel("-- / --"))
+      durationSlider(new QSlider(Qt::Horizontal)),
+      durationLabel(new QLabel("-- / --")),
+      volumeSlider(new QSlider(Qt::Vertical)),
+      volumeLabel(new QLabel("100")),
+      player(new QMediaPlayer)
 {
     setupActions();
-    slider->setMinimum(0);
 
     QMenuBar *bar = menuBar();
 
@@ -44,23 +47,50 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::onDurationChanged);
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::onPositionChanged);
-    connect(slider, &QSlider::sliderMoved, player, &QMediaPlayer::setPosition);
+    connect(durationSlider, &QSlider::sliderMoved, player, &QMediaPlayer::setPosition);
+    connect(volumeSlider, &QSlider::valueChanged, [this](int val) { this->volumeLabel->setText(QString::number(val)); });
+    connect(volumeSlider, &QSlider::valueChanged, player, &QMediaPlayer::setVolume);
+
+
+    durationSlider->setMinimum(0);
+
+    volumeSlider->setMinimum(0);
+    volumeSlider->setMaximum(100);
+    volumeSlider->setValue(100);
+
+    volumeSlider->setMaximumHeight(durationSlider->sizeHint().height()*2);
 
     QWidget *mainWidg = new QWidget;
 
-    QHBoxLayout *sliderLay = new QHBoxLayout;
-    sliderLay->addWidget(slider);
-    sliderLay->addWidget(duration);
+    QGroupBox *seekBox = new QGroupBox("Time seek");
+    QGroupBox *volumeBox = new QGroupBox("Volume");
 
-    QVBoxLayout *lay = new QVBoxLayout;
-    lay->addLayout(sliderLay);
+    QHBoxLayout *sliderLay = new QHBoxLayout;
+    sliderLay->addWidget(durationSlider);
+    sliderLay->addWidget(durationLabel);
+
+    seekBox->setLayout(sliderLay);
+
+    QHBoxLayout *volumeLay = new QHBoxLayout;
+    volumeLay->addWidget(volumeSlider);
+    volumeLay->addWidget(volumeLabel);
+
+    volumeBox->setLayout(volumeLay);
+
+    QHBoxLayout *lay = new QHBoxLayout;
+//    lay->addLayout(sliderLay);
+//    lay->addLayout(volumeLay);
+    lay->addWidget(seekBox);
+    lay->addWidget(volumeBox);
     mainWidg->setLayout(lay);
     setCentralWidget(mainWidg);
 
     this->setWindowTitle(appName);
 
     auto flags = this->windowFlags();
-    flags ^= Qt::WindowMaximizeButtonHint;
+    if (flags | Qt::WindowMaximizeButtonHint) {
+        flags ^= Qt::WindowMaximizeButtonHint;
+    }
     this->setWindowFlags(flags);
 
 
@@ -127,7 +157,7 @@ void MainWindow::onDurationChanged(qint64 dur)
     int mins = secs / 60;
     secs %= 60;
     wholeTime = QString("%1:%2").arg(mins, 2, 10, QChar('0')).arg(secs, 2, 10, QChar('0'));
-    slider->setMaximum(dur);
+    durationSlider->setMaximum(dur);
 }
 
 void MainWindow::onPositionChanged(qint64 pos)
@@ -135,8 +165,8 @@ void MainWindow::onPositionChanged(qint64 pos)
     int secs = pos/1000;
     int mins = secs / 60;
     secs %= 60;
-    duration->setText(QString("%1:%2 / ").arg(mins, 2, 10, QChar('0')).arg(secs, 2, 10, QChar('0')) + this->wholeTime);
-    slider->setValue(pos);
+    durationLabel->setText(QString("%1:%2 / ").arg(mins, 2, 10, QChar('0')).arg(secs, 2, 10, QChar('0')) + this->wholeTime);
+    durationSlider->setValue(pos);
 }
 
 void MainWindow::onMoveBackwards()
