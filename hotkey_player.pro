@@ -21,3 +21,10 @@ HEADERS  += mainwindow.h
 CONFIG += C++14
 
 win32: LIBS += -lOle32 -luser32
+
+VERSION = 0.1.1
+
+DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
+
+CONFIG -= debug_and_release debug_and_release_targets
+

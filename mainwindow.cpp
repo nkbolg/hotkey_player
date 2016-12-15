@@ -18,7 +18,6 @@
 #include <QFileInfo>
 #include <QLineEdit>
 #include <QMediaPlayer>
-
 #include <QDebug>
 
 #include <QGroupBox>
@@ -197,13 +196,18 @@ void MainWindow::onAboutMe()
     QMessageBox aboutBox;
     aboutBox.setWindowTitle("About");
     aboutBox.setText(QStringLiteral(
-                         R"(Hotkeys:
+R"(
+Simple mp3 player with system-wide hotkeys.
+
+Version: %1
+
+Hotkeys:
     Play/Pause: Alt+Q
     Step backward: Alt+W
     Step forward: Alt+E
 
 
-                         Done by horokey)"));
+                         Done by horokey)").arg(VERSION_STRING));
     aboutBox.exec();
 }
 

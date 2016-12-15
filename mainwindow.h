@@ -57,7 +57,7 @@ private:
     void registerHotkey(int id, uint mod, uint key);
 
     int step = 4;
-    const QString appName = QLatin1String("Dumb mp3 player");
+    const QString appName = QLatin1String("Hot Media Player v") + VERSION_STRING;
 };
 
 #endif // MAINWINDOW_H
