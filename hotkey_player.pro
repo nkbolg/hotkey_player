@@ -28,3 +28,6 @@ DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
 
 CONFIG -= debug_and_release debug_and_release_targets
 
+RESOURCES += \
+    icons.qrc
+

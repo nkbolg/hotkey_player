@@ -59,6 +59,30 @@ MainWindow::MainWindow(QWidget *parent)
 
     volumeSlider->setMaximumHeight(durationSlider->sizeHint().height()*2);
 
+    QPushButton *openFileBtn = new QPushButton(QIcon(":/icons/folder.png"), "");
+    connect(openFileBtn, &QPushButton::clicked, actOpen, &QAction::trigger);
+    openFileBtn->setFlat(true);
+
+    QPushButton *pauseBtn = new QPushButton(QIcon(":/icons/Play-48.png"), "");
+    connect(pauseBtn, &QPushButton::clicked, actionPause, &QAction::trigger);
+    connect(player, &QMediaPlayer::stateChanged, [pauseBtn](auto state){
+        if (state == QMediaPlayer::PlayingState) {
+            pauseBtn->setIcon(QIcon(":/icons/Pause-48.png"));
+        }
+        else {
+            pauseBtn->setIcon(QIcon(":/icons/Play-48.png"));
+        }
+    });
+    pauseBtn->setFlat(true);
+
+    QPushButton *backwBtn = new QPushButton(QIcon(":/icons/Rewind-48.png"), "");
+    connect(backwBtn, &QPushButton::clicked, actionBackw, &QAction::trigger);
+    backwBtn->setFlat(true);
+
+    QPushButton *forwardBtn = new QPushButton(QIcon(":/icons/Fast Forward-48.png"), "");
+    connect(forwardBtn, &QPushButton::clicked, actionForward, &QAction::trigger);
+    forwardBtn->setFlat(true);
+
     QWidget *mainWidg = new QWidget;
 
     QGroupBox *seekBox = new QGroupBox("Time seek");
@@ -75,12 +99,21 @@ MainWindow::MainWindow(QWidget *parent)
     volumeLay->addWidget(volumeLabel);
 
     volumeBox->setLayout(volumeLay);
+    volumeBox->setMinimumWidth(volumeBox->sizeHint().width());
 
-    QHBoxLayout *lay = new QHBoxLayout;
-//    lay->addLayout(sliderLay);
-//    lay->addLayout(volumeLay);
-    lay->addWidget(seekBox);
-    lay->addWidget(volumeBox);
+    QHBoxLayout *btnLay = new QHBoxLayout;
+    btnLay->addWidget(openFileBtn);
+    btnLay->addWidget(backwBtn);
+    btnLay->addWidget(pauseBtn);
+    btnLay->addWidget(forwardBtn);
+
+    QHBoxLayout *boxesLay = new QHBoxLayout;
+    boxesLay->addWidget(seekBox);
+    boxesLay->addWidget(volumeBox);
+
+    QVBoxLayout *lay = new QVBoxLayout;
+    lay->addLayout(boxesLay);
+    lay->addLayout(btnLay);
     mainWidg->setLayout(lay);
     setCentralWidget(mainWidg);
 
