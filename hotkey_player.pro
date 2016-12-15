@@ -20,4 +20,4 @@ HEADERS  += mainwindow.h
 
 CONFIG += C++14
 
-LIBS += -lOle32
+win32: LIBS += -lOle32 -luser32

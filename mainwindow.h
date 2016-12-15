@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QAbstractNativeEventFilter>
+
 class QSlider;
 class QMediaPlayer;
 class QLabel;
@@ -16,28 +17,45 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *);
+
 private slots:
     void onFileOpen();
+    void onPause();
+    void onDurationChanged(qint64 dur);
+    void onPositionChanged(qint64 pos);
+    void onMoveBackwards();
+    void onMoveForward();
+    void onAboutMe();
+    void onSettings();
 
 private:
     bool activateHotkey(uint hotkeyId) const;
 
+    void setupActions();
+
     QSlider *slider;
     QMediaPlayer *player;
     QLabel *duration;
+    QAction *actOpen;
     QAction *actionPause;
-    QAction *backw;
+    QAction *actionBackw;
+    QAction *actionForward;
+    QAction *actAboutMe;
+    QAction *actAboutQt;
+    QAction *actSettings;
     QString wholeTime;
 
-//    const uint pauseId = 0;
-//    const uint backwId = 1;
-    enum ids
+    enum ids : uint
     {
         pauseId,
-        backwId
+        backwId,
+        fwdId
     };
 
-    void regiserHotkey(int id, uint mod, uint key);
+    void registerHotkey(int id, uint mod, uint key);
+
+    int step = 4;
+    const QString appName = QLatin1String("Dumb mp3 player");
 };
 
 #endif // MAINWINDOW_H
