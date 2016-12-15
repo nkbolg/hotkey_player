@@ -25,7 +25,7 @@ private slots:
     void onPositionChanged(qint64 pos);
     void onMoveBackwards();
     void onMoveForward();
-    void onAboutMe();
+    void onAboutMe() const;
     void onSettings();
 
 private:
@@ -54,7 +54,7 @@ private:
         fwdId
     };
 
-    void registerHotkey(int id, uint mod, uint key);
+    void registerHotkey(int id, uint mod, uint key) const;
 
     int step = 4;
     const QString appName = QLatin1String("Hot Media Player v") + VERSION_STRING;

@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
       durationLabel(new QLabel("-- / --")),
       volumeSlider(new QSlider(Qt::Vertical)),
       volumeLabel(new QLabel("100")),
-      player(new QMediaPlayer)
+      player(new QMediaPlayer(this))
 {
     setupActions();
 
@@ -142,7 +142,7 @@ MainWindow::~MainWindow()
     CoUninitialize();
 }
 
-void MainWindow::registerHotkey(int id, uint mod, uint key)
+void MainWindow::registerHotkey(int id, uint mod, uint key) const
 {
     uchar keyCode = key & 0xFF;
     BOOL res = 0;
@@ -224,7 +224,7 @@ void MainWindow::onMoveForward()
     }
 }
 
-void MainWindow::onAboutMe()
+void MainWindow::onAboutMe() const
 {
     QMessageBox aboutBox;
     aboutBox.setWindowTitle("About");
@@ -300,22 +300,22 @@ void MainWindow::setupActions()
     actOpen = new QAction("Open", this);
     connect(actOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
 
-    actionPause = new QAction("Pause");
+    actionPause = new QAction("Pause", this);
     connect(actionPause, &QAction::triggered, this, &MainWindow::onPause);
 
-    actionBackw = new QAction("Backward");
+    actionBackw = new QAction("Backward", this);
     connect(actionBackw, &QAction::triggered, this, &MainWindow::onMoveBackwards);
 
-    actionForward = new QAction("Forward");
+    actionForward = new QAction("Forward", this);
     connect(actionForward, &QAction::triggered, this, &MainWindow::onMoveForward);
 
-    actAboutMe = new QAction("About");
+    actAboutMe = new QAction("About", this);
     connect(actAboutMe, &QAction::triggered, this, &MainWindow::onAboutMe);
 
-    actAboutQt = new QAction("About Qt");
+    actAboutQt = new QAction("About Qt", this);
     connect(actAboutQt, &QAction::triggered, [this]{QMessageBox::aboutQt(this);});
 
-    actSettings = new QAction("Settings");
+    actSettings = new QAction("Settings", this);
     connect(actSettings, &QAction::triggered, this, &MainWindow::onSettings);
 }
 
