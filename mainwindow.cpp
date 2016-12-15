@@ -19,7 +19,7 @@
 #include <QLineEdit>
 #include <QMediaPlayer>
 #include <QDebug>
-
+#include <QTextDocument>
 #include <QGroupBox>
 
 
@@ -228,19 +228,25 @@ void MainWindow::onAboutMe() const
 {
     QMessageBox aboutBox;
     aboutBox.setWindowTitle("About");
-    aboutBox.setText(QStringLiteral(
+    aboutBox.setTextFormat(Qt::RichText);
+    QString aboutTxt = QStringLiteral(
 R"(
+%1
 Simple mp3 player with system-wide hotkeys.
-
-Version: %1
 
 Hotkeys:
     Play/Pause: Alt+Q
     Step backward: Alt+W
     Step forward: Alt+E
 
+%2
 
-                         Done by horokey)").arg(VERSION_STRING));
+This program is released under the MIT License.
+Copyright (C) 2016-2017 nkbolg
+)").arg(appName);
+    QString repo_url = QStringLiteral("<a href='https://github.com/nkbolg/hotkey_player'>https://github.com/nkbolg/hotkey_player</a>");
+    QString aboutHtml = Qt::convertFromPlainText(aboutTxt).arg(repo_url);
+    aboutBox.setText(aboutHtml);
     aboutBox.exec();
 }
 
